@@ -17,7 +17,11 @@ public class CodeMessage {
     public static final CodeMessage SERVER_ERROR = new CodeMessage(500, "server error");
     public static final CodeMessage PARAM_ERROR = new CodeMessage(100, "param error");
 
-    public static final CodeMessage MOBILE_FORMAT_ERROR = new CodeMessage(500212, "手机格式错误");
+    public static final CodeMessage MOBILE_FORMAT_ERROR = new CodeMessage(500212, "手机号格式错误");
+
+    public static final CodeMessage MOBILE_NOT_EXIST = new CodeMessage(500213, "手机号不存在");
+
+    public static final CodeMessage PASSWORD_ERROR = new CodeMessage(500214, "密码错误");
 
 
     private CodeMessage(int code, String message) {

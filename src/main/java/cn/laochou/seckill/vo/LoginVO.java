@@ -1,9 +1,13 @@
 package cn.laochou.seckill.vo;
 
+import javax.validation.constraints.NotNull;
+
 public class LoginVO {
 
+    @NotNull
     private String mobile;
 
+    @NotNull
     private String password;
 
 

@@ -18,6 +18,10 @@ public class Result<T> {
         return new Result<>(data);
     }
 
+    public static <T> Result<T> success(CodeMessage data) {
+        return new Result<>(data);
+    }
+
     public static <T> Result<T> error(CodeMessage codeMessage) {
         return new Result<>(codeMessage);
     }
