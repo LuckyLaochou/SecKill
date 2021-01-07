@@ -1,10 +1,13 @@
 package cn.laochou.seckill.vo;
 
+import cn.laochou.seckill.validator.IsMobile;
+
 import javax.validation.constraints.NotNull;
 
 public class LoginVO {
 
     @NotNull
+    @IsMobile
     private String mobile;
 
     @NotNull

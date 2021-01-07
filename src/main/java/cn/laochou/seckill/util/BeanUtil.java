@@ -1,4 +1,4 @@
-package cn.laochou.seckill.utils;
+package cn.laochou.seckill.util;
 
 import com.alibaba.fastjson.JSON;
 

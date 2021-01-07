@@ -1,4 +1,4 @@
-package cn.laochou.seckill.utils;
+package cn.laochou.seckill.util;
 
 import org.apache.commons.codec.digest.DigestUtils;
 

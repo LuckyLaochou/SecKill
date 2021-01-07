@@ -4,7 +4,7 @@ import cn.laochou.seckill.redis.key.base.KeyPrefix;
 import cn.laochou.seckill.redis.key.impl.CommonKeyPrefix;
 import cn.laochou.seckill.result.CodeMessage;
 import cn.laochou.seckill.result.Result;
-import cn.laochou.seckill.utils.BeanUtil;
+import cn.laochou.seckill.util.BeanUtil;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
