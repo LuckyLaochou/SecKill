@@ -1,0 +1,28 @@
+# mybatis 配置
+mybatis:
+  type-aliases-package: cn.laochou.seckill.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+    # 一个提升性能的配置
+    default-fetch-size: 100
+    default-statement-timeout: 3000
+  mapper-locations: classpath:mappers/*.xml
+
+
+spring:
+  # 数据库配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: laochou
+    type: com.alibaba.druid.pool.DruidDataSource
+  # redis 配置
+  redis:
+    host: 192.168.81.120
+    port: 6379
+    password: laochou
+    timeout: 3
+
+
+
+
