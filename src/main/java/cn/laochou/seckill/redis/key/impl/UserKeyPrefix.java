@@ -4,16 +4,12 @@ import cn.laochou.seckill.redis.key.base.BaseKeyPrefix;
 
 public class UserKeyPrefix extends BaseKeyPrefix {
 
-    public static final UserKeyPrefix PREFIX_BY_ID = new UserKeyPrefix("ID");
+    public static final UserKeyPrefix PREFIX_BY_ID = new UserKeyPrefix("ID", 500);
+    public static final UserKeyPrefix PREFIX_BY_TOKEN = new UserKeyPrefix("TOKEN", 3600 * 24);
 
 
-    private UserKeyPrefix(String keyPrefix) {
-        super(keyPrefix);
+    private UserKeyPrefix(String keyPrefix, int expireSeconds) {
+        super(keyPrefix, expireSeconds);
     }
 
-    @Override
-    public String getKeyPrefix() {
-        String className = this.getClass().getSimpleName();
-        return String.format("%s:%s", className, this.getKeyPrefix());
-    }
 }

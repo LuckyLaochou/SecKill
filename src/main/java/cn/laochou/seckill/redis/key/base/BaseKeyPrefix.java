@@ -1,17 +1,25 @@
 package cn.laochou.seckill.redis.key.base;
 
-import cn.laochou.seckill.redis.key.base.KeyPrefix;
 
 public class BaseKeyPrefix implements KeyPrefix {
 
-    private String keyPrefix;
+    private final String keyPrefix;
 
-    public BaseKeyPrefix(String keyPrefix) {
+    private final int expireSeconds;
+
+    public BaseKeyPrefix(String keyPrefix, int expireSeconds) {
         this.keyPrefix = keyPrefix;
+        this.expireSeconds = expireSeconds;
     }
 
     @Override
     public String getKeyPrefix() {
-        return null;
+        String className = this.getClass().getSimpleName();
+        return String.format("%s:%s", className, this.keyPrefix);
+    }
+
+    @Override
+    public int expireSeconds() {
+        return this.expireSeconds;
     }
 }

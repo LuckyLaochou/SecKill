@@ -16,6 +16,7 @@ public class CodeMessage {
     public static final CodeMessage SUCCESS = new CodeMessage(200, "success");
     public static final CodeMessage SERVER_ERROR = new CodeMessage(500, "server error");
     public static final CodeMessage PARAM_ERROR = new CodeMessage(100, "param error");
+    public static final CodeMessage NOT_LOGIN = new CodeMessage(202, "未登录");
 
     public static final CodeMessage MOBILE_FORMAT_ERROR = new CodeMessage(500212, "手机号格式错误");
     public static final CodeMessage MOBILE_NOT_EXIST = new CodeMessage(500213, "手机号不存在");

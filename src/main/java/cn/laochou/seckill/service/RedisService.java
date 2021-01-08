@@ -43,6 +43,7 @@ public class RedisService {
         }else {
             jedis.set(realKey, JSON.toJSONString(value));
         }
+        System.out.println(realKey);
         // 释放资源
         jedis.close();
         return Result.success(Boolean.TRUE);
