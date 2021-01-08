@@ -38,7 +38,7 @@ public class GoodsController {
         JSONObject result = new JSONObject();
         result.put("user", user);
         List<GoodsVO> goodsVOList = goodsService.getGoodsVOList();
-        result.put("goodsVOList", goodsVOList);
+        result.put("data", goodsVOList);
         return Result.success(result.toJSONString());
     }
 
@@ -48,31 +48,11 @@ public class GoodsController {
         JSONObject result = new JSONObject();
         result.put("user", user);
         GoodsVO goodsVO = goodsService.getGoodsVOById(id);
-
-
-        int seckillStatus = 0;
+        if(goodsVO == null) return Result.error(CodeMessage.GOODS_NOT_EXIST);
+        int seckillStatus = goodsService.getSeckillStatus(goodsVO);
         // 倒计时时间
-        int remainSeconds = 0;
-
-        // 逻辑判断
-        // 开始时间
-        long startDate = DateUtil.getDateTime(goodsVO.getStartDate());
-        // 截止时间
-        long endDate = DateUtil.getDateTime(goodsVO.getEndDate());
-        // 当前时间
-        long now = System.currentTimeMillis();
-        if(now < startDate) {
-            // 秒杀还没开始
-            remainSeconds = (int) ((startDate - now) / 1000);
-        }else if(now > endDate) {
-            // 秒杀已经结束了
-            seckillStatus = 2;
-            remainSeconds = -1;
-        }else {
-            // 秒杀进行中
-            seckillStatus = 1;
-            result.put("goods", goodsVO);
-        }
+        int remainSeconds = seckillStatus == 0 ? goodsService.getRemainSeconds(goodsVO) : -1;
+        if(seckillStatus == 1) result.put("goods", goodsVO);
         result.put("seckillStatus", seckillStatus);
         result.put("remainSeconds", remainSeconds);
         return Result.success(result.toJSONString());
