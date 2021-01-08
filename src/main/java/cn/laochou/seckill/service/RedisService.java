@@ -59,7 +59,7 @@ public class RedisService {
         String realKey = String.format("%s:%s", keyPrefix.getKeyPrefix(), key);
         String value = jedis.get(realKey);
         if(value == null || value.isEmpty()) {
-            return (T) "";
+            return null;
         }
         T t = (T) BeanUtil.stringToBean(value, clazz);
         // 释放资源

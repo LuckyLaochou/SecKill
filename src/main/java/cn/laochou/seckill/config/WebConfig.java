@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
     /**
      * 添加参数解析器
      * 我们Controller里面的方法带的参数，就是通过参数解析器传的
-     * @param resolvers
+     * @param resolvers 一系列解析器
      */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {

@@ -1,6 +1,8 @@
 package cn.laochou.seckill.config;
 
+import cn.laochou.seckill.exception.GlobalException;
 import cn.laochou.seckill.pojo.User;
+import cn.laochou.seckill.result.CodeMessage;
 import cn.laochou.seckill.service.UserService;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
@@ -38,19 +40,19 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter methodParameter,
                                   ModelAndViewContainer modelAndViewContainer,
                                   NativeWebRequest nativeWebRequest,
-                                  WebDataBinderFactory webDataBinderFactory) throws Exception {
+                                  WebDataBinderFactory webDataBinderFactory) {
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
         if(request != null && response != null) {
             String paramToken = request.getParameter(UserService.COOKIE_NAME);
             String cookieToken = getCookieToken(request, UserService.COOKIE_NAME);
             if(ObjectUtils.isEmpty(paramToken) && ObjectUtils.isEmpty(cookieToken)) {
-                return null;
+                throw new GlobalException(CodeMessage.NOT_LOGIN);
             }
             String token = ObjectUtils.isEmpty(paramToken) ? cookieToken : paramToken;
             return userService.getUserByToken(response, token);
         }
-        return null;
+        throw new GlobalException(CodeMessage.SERVER_ERROR);
     }
 
     private String getCookieToken(HttpServletRequest request, String cookieName) {
