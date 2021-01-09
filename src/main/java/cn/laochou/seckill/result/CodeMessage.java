@@ -23,6 +23,8 @@ public class CodeMessage {
     public static final CodeMessage PASSWORD_ERROR = new CodeMessage(500214, "密码错误");
     public static final CodeMessage BIND_ERROR = new CodeMessage(500215, "参数校验异常 : %s");
     public static final CodeMessage GOODS_NOT_EXIST = new CodeMessage(500216, "您所查找的商品并不存在");
+    public static final CodeMessage GOODS_STOCK_EMPTY = new CodeMessage(500219, "您所查找的商品没有库存");
+    public static final CodeMessage SECKILL_ALREADY = new CodeMessage(500220, "您已经秒杀过了");
 
 
     private CodeMessage(int code, String message) {

@@ -9,6 +9,12 @@ public class DateUtil {
     private static final String format = "yyyy-MM-dd HH:mm:ss";
 
 
+    public static String dateToString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        return dateFormat.format(new Date());
+    }
+
+
     public static Date stringToDate(String dateStr) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         try {

@@ -4,23 +4,16 @@ import cn.laochou.seckill.pojo.User;
 import cn.laochou.seckill.result.CodeMessage;
 import cn.laochou.seckill.result.Result;
 import cn.laochou.seckill.service.GoodsService;
-import cn.laochou.seckill.service.RedisService;
-import cn.laochou.seckill.service.UserService;
-import cn.laochou.seckill.util.DateUtil;
 import cn.laochou.seckill.vo.GoodsVO;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -49,6 +42,7 @@ public class GoodsController {
         result.put("user", user);
         GoodsVO goodsVO = goodsService.getGoodsVOById(id);
         if(goodsVO == null) return Result.error(CodeMessage.GOODS_NOT_EXIST);
+        // 秒杀状态
         int seckillStatus = goodsService.getSeckillStatus(goodsVO);
         // 倒计时时间
         int remainSeconds = seckillStatus == 0 ? goodsService.getRemainSeconds(goodsVO) : -1;

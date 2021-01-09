@@ -36,8 +36,8 @@ public class Result<T> {
     }
 
     private Result(T data) {
-        this.code = 200;
-        this.message = "success";
+        this.code = CodeMessage.SUCCESS.getCode();
+        this.message = CodeMessage.SUCCESS.getMessage();
         this.data = data;
     }
 

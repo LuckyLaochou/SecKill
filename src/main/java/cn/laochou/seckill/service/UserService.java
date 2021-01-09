@@ -8,6 +8,7 @@ import cn.laochou.seckill.redis.key.impl.UserKeyPrefix;
 import cn.laochou.seckill.result.CodeMessage;
 import cn.laochou.seckill.util.MD5Util;
 import cn.laochou.seckill.util.UUIDUtil;
+import cn.laochou.seckill.util.ValidatorUtil;
 import cn.laochou.seckill.vo.LoginVO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -36,6 +37,9 @@ public class UserService {
         System.out.println(loginVO);
         if (loginVO == null) throw new GlobalException(CodeMessage.SERVER_ERROR);
         String mobile = loginVO.getMobile();
+        // 验证手机号格式
+        boolean isMobile = ValidatorUtil.isMobile(mobile);
+        if(!isMobile) throw new GlobalException(CodeMessage.MOBILE_FORMAT_ERROR);
         String password = loginVO.getPassword();
         // 判断手机号是否存在
         User user = userDao.getUserByID(Long.valueOf(mobile));
