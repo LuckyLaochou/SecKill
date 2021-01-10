@@ -68,6 +68,17 @@ public class RedisService {
     }
 
 
+    public boolean delete(KeyPrefix keyPrefix, String key) {
+        Jedis jedis = jedisPool.getResource();
+        if(keyPrefix == null) {
+            keyPrefix = CommonKeyPrefix.COMMON_KEY_PREFIX;
+        }
+        String realKey = String.format("%s:%s", keyPrefix.getKeyPrefix(), key);
+        long result = jedis.del(realKey);
+        jedis.close();
+        return result > 0;
+    }
+
 
 
 

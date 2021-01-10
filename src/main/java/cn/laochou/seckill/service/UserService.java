@@ -30,11 +30,15 @@ public class UserService {
     private RedisService redisService;
 
     public User getUserByID(Long userId) {
-        return userDao.getUserByID(userId);
+        // 从缓存中取
+        User user = redisService.get(UserKeyPrefix.PREFIX_BY_ID, String.valueOf(userId), User.class);
+        if(user != null) return user;
+        user = userDao.getUserByID(userId);
+        redisService.set(UserKeyPrefix.PREFIX_BY_ID, String.valueOf(userId), user);
+        return user;
     }
 
     public boolean login(HttpServletResponse response, LoginVO loginVO) {
-        System.out.println(loginVO);
         if (loginVO == null) throw new GlobalException(CodeMessage.SERVER_ERROR);
         String mobile = loginVO.getMobile();
         // 验证手机号格式
@@ -90,5 +94,23 @@ public class UserService {
         cookie.setMaxAge(keyPrefix.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+
+    public boolean updatePassword(String token, Long id, String password) {
+        // 获取User
+        User user = getUserByID(id);
+        if(user == null) throw new GlobalException(CodeMessage.MOBILE_NOT_EXIST);
+        User updateUser = new User();
+        user.setId(id);
+        user.setPassword(password);
+        userDao.update(updateUser);
+        // 处理缓存
+        // 这里科山可不删，修改也可以
+        redisService.delete(UserKeyPrefix.PREFIX_BY_ID, String.valueOf(id));
+        user.setPassword(password);
+        // 注意，这里是必须修改，因为如果删除了就得重新登录
+        redisService.set(UserKeyPrefix.PREFIX_BY_TOKEN, token, user);
+        return true;
     }
 }

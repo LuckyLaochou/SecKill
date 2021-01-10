@@ -1,6 +1,7 @@
 package cn.laochou.seckill.service;
 
 import cn.laochou.seckill.dao.GoodsDao;
+import cn.laochou.seckill.enums.SeckillStatusEnum;
 import cn.laochou.seckill.pojo.Goods;
 import cn.laochou.seckill.pojo.SeckillGoods;
 import cn.laochou.seckill.util.DateUtil;
@@ -41,13 +42,14 @@ public class GoodsService {
         // 当前时间
         long now = System.currentTimeMillis();
         if(now < startDate) {
-          seckillStatus = 0;
+            // 秒杀还未开始
+            seckillStatus = SeckillStatusEnum.SECKILL_NOT_BEGIN.getStatus();
         } else if(now > endDate) {
             // 秒杀已经结束了
-            seckillStatus = 2;
+            seckillStatus = SeckillStatusEnum.SECKILL_END.getStatus();
         }else {
             // 秒杀进行中
-            seckillStatus = 1;
+            seckillStatus = SeckillStatusEnum.SECKILL_ING.getStatus();
         }
         return seckillStatus;
     }
