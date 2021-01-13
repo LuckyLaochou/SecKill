@@ -11,4 +11,10 @@ public class GoodsKeyPrefix extends BaseKeyPrefix {
 
     public static GoodsKeyPrefix PREFIX_GOODSLIST = new GoodsKeyPrefix("GOODSLIST", 500);
 
+    // 用来预减库存的
+    public static GoodsKeyPrefix PREFIX_SECKILL_GOODSSTOCK = new GoodsKeyPrefix("SECKILL_GOODSSTOCK", 0);
+
+    // 用来记录真实库存的
+    public static GoodsKeyPrefix PREFIX_SQL_GOODSSTOCK = new GoodsKeyPrefix("SQL_GOODSSTOCK", 0);
+
 }

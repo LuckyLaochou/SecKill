@@ -1,6 +1,8 @@
 package cn.laochou.seckill.result;
 
-public class Result<T> {
+import java.io.Serializable;
+
+public class Result<T> implements Serializable {
 
     private int code;
 

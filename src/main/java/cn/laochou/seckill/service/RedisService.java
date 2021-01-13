@@ -43,6 +43,8 @@ public class RedisService {
         }else {
             jedis.set(realKey, JSON.toJSONString(value));
         }
+        // 给我们的key设置过期时间
+//        jedis.expire(realKey, keyPrefix.expireSeconds());
         System.out.println(realKey);
         // 释放资源
         jedis.close();
@@ -68,6 +70,12 @@ public class RedisService {
     }
 
 
+    /**
+     * 从Redis中删除
+     * @param keyPrefix
+     * @param key
+     * @return
+     */
     public boolean delete(KeyPrefix keyPrefix, String key) {
         Jedis jedis = jedisPool.getResource();
         if(keyPrefix == null) {
@@ -77,6 +85,19 @@ public class RedisService {
         long result = jedis.del(realKey);
         jedis.close();
         return result > 0;
+    }
+
+
+    public long decr(KeyPrefix keyPrefix, String key) {
+        Jedis jedis = jedisPool.getResource();
+        if(keyPrefix == null) {
+            keyPrefix = CommonKeyPrefix.COMMON_KEY_PREFIX;
+        }
+        String realKey = String.format("%s:%s", keyPrefix.getKeyPrefix(), key);
+        long result = jedis.decr(realKey);
+        System.out.println(result);
+        jedis.close();
+        return result;
     }
 
 

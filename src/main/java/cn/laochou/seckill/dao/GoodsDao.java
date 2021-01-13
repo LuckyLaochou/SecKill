@@ -16,8 +16,12 @@ public interface GoodsDao {
     List<GoodsVO> getGoodsVOList();
 
     @Select("select g.*, sg.seckill_price, sg.stock_count, sg.start_date, sg.end_date from seckill_goods sg left join goods g on sg.goods_id = g.id where g.id = #{id}")
-    GoodsVO getGoodsVOById(@Param("id") int id);
+    GoodsVO getGoodsVOById(@Param("id") Long id);
 
-    @Update("update seckill_goods set stock_count = stock_count - 1 where goods_id = #{goodsId}")
-    void reduceStock(@Param("goodsId") long goodsId);
+    // stock_count > 0 从数据库层面做了一次判断（防止超卖场景下）
+    @Update("update seckill_goods set stock_count = stock_count - 1 where goods_id = #{goodsId} and stock_count > 0")
+    int reduceStock(@Param("goodsId") long goodsId);
+
+    @Select("select stock_count from seckill_goods where goods_id = #{goodsId}")
+    int getGoodsStockById(@Param("goodsId") Long goodsId);
 }

@@ -4,7 +4,9 @@ public enum SeckillStatusEnum {
 
     SECKILL_NOT_BEGIN(0, "秒杀还没开始呢"),
     SECKILL_ING(1, "秒杀进行中"),
-    SECKILL_END(2, "秒杀已经终止了");
+    SECKILL_END(2, "秒杀已经终止了"),
+    SECKILL_FAIL(-1, "秒杀失败"),
+    SECKILL_BE_QUEUEING(3, "排队中");
 
 
     private final int status;

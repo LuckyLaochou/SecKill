@@ -17,4 +17,18 @@ public class BeanUtil {
         }
     }
 
+    public static <T> String beanToString(T value) {
+        if(value == null) return null;
+        Class<?> clazz = value.getClass();
+        if(clazz == Integer.class) {
+            return String.valueOf(value);
+        }else if(clazz == String.class) {
+            return (String) value;
+        }else if(clazz == Long.class) {
+            return String.valueOf(value);
+        }else {
+            return JSON.toJSONString(value);
+        }
+    }
+
 }

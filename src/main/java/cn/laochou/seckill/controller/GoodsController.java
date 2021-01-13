@@ -50,7 +50,7 @@ public class GoodsController {
 
     @RequestMapping("/detail/{id}")
     @ResponseBody
-    public Result<GoodsDetailVO> getGoodsVODetailByID(@PathVariable("id") int id, User user) {
+    public Result<GoodsDetailVO> getGoodsVODetailByID(@PathVariable("id") Long id, User user) {
         GoodsDetailVO goodsDetailVO = new GoodsDetailVO();
         goodsDetailVO.setUser(user);
         GoodsVO goodsVO = goodsService.getGoodsVOById(id);

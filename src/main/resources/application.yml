@@ -22,3 +22,28 @@ spring:
     port: 6379
     password: laochou
     timeout: 1000
+  # rabbitmq 配置
+  rabbitmq:
+    host: 192.168.81.120
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    listener:
+      simple:
+        # 代表消费者的数量
+        concurrency: 10
+        max-concurrency: 10
+        # 表示从队列中，每次取几个
+        prefetch: 1
+        # 消费者自动启动
+        auto-startup: true
+        # 消费失败，会进行重试
+        default-requeue-rejected: true
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000
+        max-attempts: 3
+        max-interval: 10000
+        multiplier: 1

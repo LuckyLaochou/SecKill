@@ -50,7 +50,9 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                 throw new GlobalException(CodeMessage.NOT_LOGIN);
             }
             String token = ObjectUtils.isEmpty(paramToken) ? cookieToken : paramToken;
-            return userService.getUserByToken(response, token);
+            User user =  userService.getUserByToken(response, token);
+            if(user == null) throw new GlobalException(CodeMessage.NOT_LOGIN);
+            return user;
         }
         throw new GlobalException(CodeMessage.SERVER_ERROR);
     }

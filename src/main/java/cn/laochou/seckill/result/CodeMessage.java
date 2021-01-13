@@ -8,7 +8,7 @@ package cn.laochou.seckill.result;
  */
 public class CodeMessage {
 
-    private int code;
+    private final int code;
 
     private String message;
 
@@ -17,6 +17,8 @@ public class CodeMessage {
     public static final CodeMessage SERVER_ERROR = new CodeMessage(500, "server error");
     public static final CodeMessage PARAM_ERROR = new CodeMessage(100, "param error");
     public static final CodeMessage NOT_LOGIN = new CodeMessage(202, "未登录");
+    public static final CodeMessage BE_QUEUEING = new CodeMessage(203, "排队中");
+    public static final CodeMessage PATH_ILLEGAL = new CodeMessage(205, "链接违法");
 
     public static final CodeMessage MOBILE_FORMAT_ERROR = new CodeMessage(500212, "手机号格式错误");
     public static final CodeMessage MOBILE_NOT_EXIST = new CodeMessage(500213, "手机号不存在");
@@ -25,7 +27,10 @@ public class CodeMessage {
     public static final CodeMessage GOODS_NOT_EXIST = new CodeMessage(500216, "您所查找的商品并不存在");
     public static final CodeMessage GOODS_STOCK_EMPTY = new CodeMessage(500219, "您所查找的商品没有库存");
     public static final CodeMessage SECKILL_ALREADY = new CodeMessage(500220, "您已经秒杀过了");
+    public static final CodeMessage SECKILL_FAIL = new CodeMessage(500221, "秒杀失败");
 
+
+    public static final CodeMessage ORDER_NOT_EXIST = new CodeMessage(500300, "您所查找的订单并不存在");
 
     private CodeMessage(int code, String message) {
         this.code = code;

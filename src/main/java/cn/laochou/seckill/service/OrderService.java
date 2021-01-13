@@ -4,6 +4,7 @@ import cn.laochou.seckill.dao.OrderDao;
 import cn.laochou.seckill.pojo.OrderInfo;
 import cn.laochou.seckill.pojo.SeckillOrder;
 import cn.laochou.seckill.pojo.User;
+import cn.laochou.seckill.redis.key.impl.OrderKeyPrefix;
 import cn.laochou.seckill.util.DateUtil;
 import cn.laochou.seckill.vo.GoodsVO;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,21 @@ public class OrderService {
     private OrderDao orderDao;
 
 
+    @Resource(name = "redisService")
+    private RedisService redisService;
+
     /**
      * 查找秒杀订单根据用户ID和商品ID
      * @param userId 用户ID
      * @param goodsId 商品ID
      * @return 秒杀订单
      */
-    public SeckillOrder getSeckillOrderByUserIdAndGoodsId(Long userId, int goodsId) {
-        return orderDao.getSeckillOrderByUserIdAndGoodsId(userId, goodsId);
+    public SeckillOrder getSeckillOrderByUserIdAndGoodsId(Long userId, Long goodsId) {
+        SeckillOrder seckillOrder = redisService.get(OrderKeyPrefix.PREFIX_BY_USERID_GOODSID, String.format("%s:%s", userId, goodsId), SeckillOrder.class);
+        if(seckillOrder != null) return seckillOrder;
+        seckillOrder =  orderDao.getSeckillOrderByUserIdAndGoodsId(userId, goodsId);
+        redisService.set(OrderKeyPrefix.PREFIX_BY_USERID_GOODSID, String.format("%s:%s", userId, goodsId), seckillOrder);
+        return seckillOrder;
     }
 
 
@@ -51,11 +59,17 @@ public class OrderService {
         orderInfo.setStatus(0);
         orderInfo.setUserId(user.getId());
         orderDao.insertOrder(orderInfo);
+        // 生成秒杀订单
         SeckillOrder seckillOrder = new SeckillOrder();
         seckillOrder.setGoodsId(goodsVO.getId());
         seckillOrder.setOrderId(orderInfo.getId());
         seckillOrder.setUserId(user.getId());
         orderDao.insertSeckillOrder(seckillOrder);
+        redisService.set(OrderKeyPrefix.PREFIX_BY_USERID_GOODSID, String.format("%s:%s", user.getId(), goodsVO.getId()), seckillOrder);
         return orderInfo;
+    }
+
+    public OrderInfo getOrderInfoById(Long id) {
+        return orderDao.getOrderById(id);
     }
 }

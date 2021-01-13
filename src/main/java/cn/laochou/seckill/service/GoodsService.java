@@ -2,8 +2,6 @@ package cn.laochou.seckill.service;
 
 import cn.laochou.seckill.dao.GoodsDao;
 import cn.laochou.seckill.enums.SeckillStatusEnum;
-import cn.laochou.seckill.pojo.Goods;
-import cn.laochou.seckill.pojo.SeckillGoods;
 import cn.laochou.seckill.util.DateUtil;
 import cn.laochou.seckill.vo.GoodsVO;
 import org.springframework.stereotype.Service;
@@ -23,7 +21,7 @@ public class GoodsService {
     }
 
 
-    public GoodsVO getGoodsVOById(int id) {
+    public GoodsVO getGoodsVOById(Long id) {
         return goodsDao.getGoodsVOById(id);
     }
 
@@ -72,7 +70,13 @@ public class GoodsService {
      * 减库存的方法
      * @param goodsId 商品ID
      */
-    public void reduceStock(long goodsId) {
-        goodsDao.reduceStock(goodsId);
+    public boolean reduceStock(long goodsId) {
+        int result = goodsDao.reduceStock(goodsId);
+        return result > 0;
+    }
+
+    // 其实这里是有必要放入Redis的
+    public int getGoodsStockById(Long goodsId) {
+        return goodsDao.getGoodsStockById(goodsId);
     }
 }
