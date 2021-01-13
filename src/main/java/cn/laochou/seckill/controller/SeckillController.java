@@ -1,6 +1,6 @@
 package cn.laochou.seckill.controller;
 
-import cn.laochou.seckill.config.MQConfig;
+import cn.laochou.seckill.access.AccessLimit;
 import cn.laochou.seckill.enums.SeckillStatusEnum;
 import cn.laochou.seckill.pojo.SeckillOrder;
 import cn.laochou.seckill.pojo.User;
@@ -139,6 +139,7 @@ public class SeckillController implements InitializingBean {
      * @param goodsId 商品ID
      * @return 秒杀链接
      */
+    @AccessLimit(seconds = 5, count = 5)
     @RequestMapping("/seckill/path")
     @ResponseBody
     public Result<String> getSeckillPath(User user, @RequestParam(name = "goodsId") Long goodsId) {

@@ -1,20 +1,18 @@
 package cn.laochou.seckill.config;
 
+import cn.laochou.seckill.access.UserContext;
 import cn.laochou.seckill.exception.GlobalException;
 import cn.laochou.seckill.pojo.User;
 import cn.laochou.seckill.result.CodeMessage;
 import cn.laochou.seckill.service.UserService;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,26 +42,14 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
         if(request != null && response != null) {
-            String paramToken = request.getParameter(UserService.COOKIE_NAME);
-            String cookieToken = getCookieToken(request, UserService.COOKIE_NAME);
-            if(ObjectUtils.isEmpty(paramToken) && ObjectUtils.isEmpty(cookieToken)) {
-                throw new GlobalException(CodeMessage.NOT_LOGIN);
-            }
-            String token = ObjectUtils.isEmpty(paramToken) ? cookieToken : paramToken;
-            User user =  userService.getUserByToken(response, token);
-            if(user == null) throw new GlobalException(CodeMessage.NOT_LOGIN);
-            return user;
+            // 先从UserContext来获取是否存在User
+            // 因为对于AccessLimit可能存在没有打在需要登录的业务上
+            User user = UserContext.getUser();
+            if(user != null) return user;
+            return userService.getUserFromRequestTokenOrCookieToken(request, response);
         }
         throw new GlobalException(CodeMessage.SERVER_ERROR);
     }
 
-    private String getCookieToken(HttpServletRequest request, String cookieName) {
-        Cookie[] cookies = request.getCookies();
-        for(Cookie cookie : cookies) {
-            if(cookie.getName().equals(cookieName)) {
-                return cookie.getValue();
-            }
-        }
-        return null;
-    }
+
 }

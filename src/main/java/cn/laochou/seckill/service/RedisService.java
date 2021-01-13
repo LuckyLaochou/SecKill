@@ -35,13 +35,13 @@ public class RedisService {
         }
         // 参数类型判断
         if(value.getClass() == Integer.class) {
-            jedis.set(realKey, String.format("%s", value));
+            jedis.setex(realKey, keyPrefix.expireSeconds(), String.format("%s", value));
         }else if(value.getClass() == String.class) {
-            jedis.set(realKey, String.valueOf(value));
+            jedis.setex(realKey, keyPrefix.expireSeconds(), String.valueOf(value));
         }else if(value.getClass() == Long.class) {
-            jedis.set(realKey, String.format("%s", value));
+            jedis.setex(realKey, keyPrefix.expireSeconds(), String.format("%s", value));
         }else {
-            jedis.set(realKey, JSON.toJSONString(value));
+            jedis.setex(realKey, keyPrefix.expireSeconds(), JSON.toJSONString(value));
         }
         // 给我们的key设置过期时间
 //        jedis.expire(realKey, keyPrefix.expireSeconds());
@@ -88,6 +88,12 @@ public class RedisService {
     }
 
 
+    /**
+     * 递减值
+     * @param keyPrefix
+     * @param key
+     * @return
+     */
     public long decr(KeyPrefix keyPrefix, String key) {
         Jedis jedis = jedisPool.getResource();
         if(keyPrefix == null) {
@@ -96,6 +102,22 @@ public class RedisService {
         String realKey = String.format("%s:%s", keyPrefix.getKeyPrefix(), key);
         long result = jedis.decr(realKey);
         System.out.println(result);
+        jedis.close();
+        return result;
+    }
+
+
+    /**
+     * 增加值
+     * */
+    public Long incr(KeyPrefix keyPrefix, String key) {
+        Jedis jedis = jedisPool.getResource();
+        if(keyPrefix == null) {
+            keyPrefix = CommonKeyPrefix.COMMON_KEY_PREFIX;
+        }
+        //生成真正的key
+        String realKey  = String.format("%s:%s", keyPrefix.getKeyPrefix(), key);
+        long result = jedis.incr(realKey);
         jedis.close();
         return result;
     }

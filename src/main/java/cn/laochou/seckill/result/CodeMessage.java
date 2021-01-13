@@ -29,6 +29,8 @@ public class CodeMessage {
     public static final CodeMessage SECKILL_ALREADY = new CodeMessage(500220, "您已经秒杀过了");
     public static final CodeMessage SECKILL_FAIL = new CodeMessage(500221, "秒杀失败");
 
+    public static final CodeMessage ACCESS_FREQUENT = new CodeMessage(500225, "访问过于频繁");
+
 
     public static final CodeMessage ORDER_NOT_EXIST = new CodeMessage(500300, "您所查找的订单并不存在");
 

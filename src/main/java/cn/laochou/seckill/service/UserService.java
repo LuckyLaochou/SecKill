@@ -15,6 +15,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Service
@@ -106,11 +107,38 @@ public class UserService {
         user.setPassword(password);
         userDao.update(updateUser);
         // 处理缓存
-        // 这里科山可不删，修改也可以
+        // 这里可删可不删，修改也可以
         redisService.delete(UserKeyPrefix.PREFIX_BY_ID, String.valueOf(id));
         user.setPassword(password);
         // 注意，这里是必须修改，因为如果删除了就得重新登录
         redisService.set(UserKeyPrefix.PREFIX_BY_TOKEN, token, user);
         return true;
     }
+
+
+    // 抽取
+    public User getUserFromRequestTokenOrCookieToken(HttpServletRequest request, HttpServletResponse response) {
+        String paramToken = request.getParameter(COOKIE_NAME);
+        String cookieToken = getCookieToken(request, COOKIE_NAME);
+        if(ObjectUtils.isEmpty(paramToken) && ObjectUtils.isEmpty(cookieToken)) {
+            throw new GlobalException(CodeMessage.NOT_LOGIN);
+        }
+        String token = ObjectUtils.isEmpty(paramToken) ? cookieToken : paramToken;
+        User user =  getUserByToken(response, token);
+        if(user == null) throw new GlobalException(CodeMessage.NOT_LOGIN);
+        return user;
+    }
+
+
+    private String getCookieToken(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie : cookies) {
+            if(cookie.getName().equals(cookieName)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+
+
 }

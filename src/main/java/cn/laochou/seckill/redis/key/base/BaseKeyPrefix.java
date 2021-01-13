@@ -3,9 +3,9 @@ package cn.laochou.seckill.redis.key.base;
 
 public class BaseKeyPrefix implements KeyPrefix {
 
-    private final String keyPrefix;
+    protected final String keyPrefix;
 
-    private final int expireSeconds;
+    protected int expireSeconds;
 
     public BaseKeyPrefix(String keyPrefix, int expireSeconds) {
         this.keyPrefix = keyPrefix;
