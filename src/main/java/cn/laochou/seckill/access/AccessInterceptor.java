@@ -52,13 +52,12 @@ public class AccessInterceptor implements HandlerInterceptor {
             if(countInRedis == null) {
                 // 证明是第一次访问
                 redisService.set(AccessKeyPrefix.PREFIX_ACCESS, key, 1);
-            }else if(count < 5) {
+            }else if(countInRedis < count) {
                 redisService.incr(AccessKeyPrefix.PREFIX_ACCESS, key);
             }else {
                 throw new GlobalException(CodeMessage.ACCESS_FREQUENT);
             }
-
-
+            return true;
         }
         return false;
     }

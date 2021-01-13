@@ -33,15 +33,12 @@ public class RedisService {
         if(value == null) {
             return Result.error(CodeMessage.PARAM_ERROR);
         }
-        // 参数类型判断
-        if(value.getClass() == Integer.class) {
-            jedis.setex(realKey, keyPrefix.expireSeconds(), String.format("%s", value));
-        }else if(value.getClass() == String.class) {
-            jedis.setex(realKey, keyPrefix.expireSeconds(), String.valueOf(value));
-        }else if(value.getClass() == Long.class) {
-            jedis.setex(realKey, keyPrefix.expireSeconds(), String.format("%s", value));
+        String data = BeanUtil.beanToString(value);
+        if(keyPrefix.expireSeconds() > 0) {
+            // 设置过期时间
+            jedis.setex(realKey, keyPrefix.expireSeconds(), data);
         }else {
-            jedis.setex(realKey, keyPrefix.expireSeconds(), JSON.toJSONString(value));
+            jedis.set(realKey, data);
         }
         // 给我们的key设置过期时间
 //        jedis.expire(realKey, keyPrefix.expireSeconds());
