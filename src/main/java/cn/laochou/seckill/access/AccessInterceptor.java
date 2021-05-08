@@ -9,7 +9,6 @@ import cn.laochou.seckill.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import sun.plugin2.os.windows.SECURITY_ATTRIBUTES;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;

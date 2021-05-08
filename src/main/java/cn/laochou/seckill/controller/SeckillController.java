@@ -51,7 +51,7 @@ public class SeckillController implements InitializingBean {
     private MQSender mqSender;
 
     // 内存标记
-    private final Map<Long, Boolean> map = new HashMap<Long, Boolean>();
+    private final Map<Long, Boolean> map = new HashMap<>();
 
 
     /**

@@ -2,8 +2,10 @@ package cn.laochou.seckill.service;
 
 import cn.laochou.seckill.dao.GoodsDao;
 import cn.laochou.seckill.enums.SeckillStatusEnum;
+import cn.laochou.seckill.redis.key.impl.GoodsKeyPrefix;
 import cn.laochou.seckill.util.DateUtil;
 import cn.laochou.seckill.vo.GoodsVO;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,6 +16,9 @@ public class GoodsService {
 
     @Resource(name = "goodsDao")
     private GoodsDao goodsDao;
+
+    @Resource(name = "redisService")
+    private RedisService redisService;
 
 
     public List<GoodsVO> getGoodsVOList() {
@@ -78,5 +83,15 @@ public class GoodsService {
     // 其实这里是有必要放入Redis的
     public int getGoodsStockById(Long goodsId) {
         return goodsDao.getGoodsStockById(goodsId);
+    }
+
+    public String getGoodsList() {
+        String cacheGoodsVO = redisService.get(GoodsKeyPrefix.PREFIX_GOODSLIST, "", String.class);
+        if(cacheGoodsVO == null) {
+            List<GoodsVO> goodsVOList = getGoodsVOList();
+            cacheGoodsVO = JSONObject.toJSONString(goodsVOList);
+            redisService.set(GoodsKeyPrefix.PREFIX_GOODSLIST, "", cacheGoodsVO);
+        }
+        return cacheGoodsVO;
     }
 }

@@ -2,11 +2,9 @@ package cn.laochou.seckill.controller;
 
 import cn.laochou.seckill.enums.SeckillStatusEnum;
 import cn.laochou.seckill.pojo.User;
-import cn.laochou.seckill.redis.key.impl.GoodsKeyPrefix;
 import cn.laochou.seckill.result.CodeMessage;
 import cn.laochou.seckill.result.Result;
 import cn.laochou.seckill.service.GoodsService;
-import cn.laochou.seckill.service.RedisService;
 import cn.laochou.seckill.vo.GoodsDetailVO;
 import cn.laochou.seckill.vo.GoodsVO;
 import com.alibaba.fastjson.JSONObject;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @Controller
 @RequestMapping("/goods")
@@ -29,21 +26,13 @@ public class GoodsController {
     @Resource(name = "goodsService")
     private GoodsService goodsService;
 
-    @Resource(name = "redisService")
-    private RedisService redisService;
-
     @RequestMapping("/list")
     @ResponseBody
     public Result<String> getGoodsList(User user) {
         JSONObject result = new JSONObject();
         result.put("user", user);
-        // 从缓冲里面拿列表转换成JSON的字符。
-        String cacheGoodsVO = redisService.get(GoodsKeyPrefix.PREFIX_GOODSLIST, "", String.class);
-        if(cacheGoodsVO == null) {
-            List<GoodsVO> goodsVOList = goodsService.getGoodsVOList();
-            cacheGoodsVO = JSONObject.toJSONString(goodsVOList);
-            redisService.set(GoodsKeyPrefix.PREFIX_GOODSLIST, "", cacheGoodsVO);
-        }
+        // 所有业务代码都应该在Service里面
+        String cacheGoodsVO = goodsService.getGoodsList();
         result.put("data", cacheGoodsVO);
         return Result.success(result.toJSONString());
     }
