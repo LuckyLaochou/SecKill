@@ -20,6 +20,7 @@ public class Result<T> implements Serializable {
      * @param data 返回的数据
      * @param <T> 泛型
      * @return 返回封装的数据
+     * 注意，这个 T 是可以更改的，因为我们是通过 T data 来得到 类型的
      */
     public static <T> Result<T> success(T data) {
         return new Result<>(data);

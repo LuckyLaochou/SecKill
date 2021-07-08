@@ -16,8 +16,6 @@ public class MQConfig {
 
 
 
-
-
     @Bean
     public Queue queue() {
         return new Queue(SECKILL_QUEUE, true);

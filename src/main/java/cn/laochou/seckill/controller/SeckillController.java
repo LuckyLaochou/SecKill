@@ -58,6 +58,7 @@ public class SeckillController implements InitializingBean {
      * 在SeckillController 加载完成之后，执行这个方法
      * 在Spring IOC 的执行流程便可以知道这个方法
      * 将我们的库存加入到Redis中
+     * 预热库存
      * @throws Exception
      */
     @Override
