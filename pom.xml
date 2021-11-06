@@ -102,6 +102,12 @@
             <version>2.13.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>de.plushnikov.lombok-intellij-plugin</groupId>
+            <artifactId>lombok-plugin</artifactId>
+            <version>0.5</version>
+        </dependency>
+
     </dependencies>
 
     <build>
