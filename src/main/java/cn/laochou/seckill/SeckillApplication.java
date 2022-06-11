@@ -8,6 +8,7 @@ public class SeckillApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SeckillApplication.class, args);
+        System.out.println("hello world ! laochou");
     }
 
 }
